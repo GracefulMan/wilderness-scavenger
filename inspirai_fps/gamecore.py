@@ -213,6 +213,11 @@ class AgentState:
             for e in filter(self.is_enemy_visible, obs_data.enemy_info_list)
         ]
 
+        self.enemy_visibility = [
+            (EnemyStateDetailed(e), self.is_enemy_visible(e))
+            for e in obs_data.enemy_info_list
+        ]
+
     def __repr__(self) -> str:
         x = self.position_x
         y = self.position_y
@@ -233,26 +238,26 @@ class AgentState:
 
         agent_team_id = [0, 1]
         agent_position = [
-            self.position_x,
             self.position_z,
             self.position_y,
-            enemy_info.location.x,
+            self.position_x,
             enemy_info.location.z,
             enemy_info.location.y,
+            enemy_info.location.x,
         ]
         camera_location = [
+            self.position_z,
+            self.position_y + camera_height,
             self.position_x,
-            self.position_z + camera_height,
-            self.position_y,
-            enemy_info.location.x,
-            enemy_info.location.z + camera_height,
-            enemy_info.location.y,
+            0,  # default 0 -> of no use
+            0,  # default 0 -> of no use
+            0,  # default 0 -> of no use
         ]
         camerarotation = [
             0,
             self.pitch,
             self.yaw,
-            0,
+            0,  # default 0 -> of no use
             0,  # default 0 -> of no use
             0,  # default 0 -> of no use
         ]
@@ -266,7 +271,7 @@ class AgentState:
             camerarotation,
         )
 
-        return is_visible[0][1]
+        return is_visible[0][1] > 0
 
     def is_supply_visible(self, supply_info: simple_command_pb2.SupplyInfo):
         supply_pos = vector3d_to_list(supply_info.supply_location)
