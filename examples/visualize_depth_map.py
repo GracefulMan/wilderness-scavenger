@@ -27,8 +27,8 @@ def visualize(depth_map):
 
 
 os.makedirs("dmp", exist_ok=True)
-map_dir = os.path.expanduser("~/map-data")
-engine_dir = os.path.expanduser("~/fps_linux")
+map_dir = os.path.expanduser("../map_data")
+engine_dir = os.path.expanduser("../fps_linux")
 
 game = Game(map_dir, engine_dir)
 game.set_available_actions(
